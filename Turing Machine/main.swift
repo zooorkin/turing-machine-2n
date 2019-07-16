@@ -8,12 +8,9 @@
 //  Copyright © 2016 Андрей Зорькин. All rights reserved.
 //
 
-import Foundation
+let machine = Machine(registors: 10)
 
-let M = Machine(registors: 10)
+machine.write(number: 3)
+machine.calculate()
 
-M.write(number: 3)
-
-M.f()
-
-print(M.currentNumber())
+print(machine.currentNumber())

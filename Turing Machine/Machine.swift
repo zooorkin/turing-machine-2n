@@ -8,49 +8,48 @@
 
 import Foundation
 
-//
-let left = -1
-let right = 1
-let none = 0
-
-// Состояние машины Тьюринга
-enum State{
-    case q0
-    case q1
-    case q2
-    case q3
-    case q4
-    case q5
-    case q6
-    case q7
-    case terminal
-}
-
 // Машина Тьюринга
 class Machine{
+    //
+    let left = -1
+    let right = 1
+    let none = 0
+    
+    // Состояние машины Тьюринга
+    enum State{
+        case q0
+        case q1
+        case q2
+        case q3
+        case q4
+        case q5
+        case q6
+        case q7
+        case terminal
+    }
     // Текущее состояние
     var state: State
     // Текущая клетка на ленте
-    var currentCell = 1
+    var currentRegistor = 1
     // Лента
     var lenta: [Character]
     //
-    var i: Int
+    var step: Int
     
     var slovo: Character{
-        return self.lenta[currentCell]
+        return self.lenta[currentRegistor]
     }
     // Инициализация ленты
     init(registors: Int){
         print("     Turing machine".uppercased())
-        i = 0
+        step = 0
         self.state = .q0
-        self.currentCell = 1
+        self.currentRegistor = 1
         lenta = [Character]()
         for _ in 1...registors{
             self.lenta += ["_"]
         }
-        g()
+        printState()
     }
     // Пишет на ленте заданное число
     func write(number: Int){
@@ -70,11 +69,11 @@ class Machine{
         return i - 1
     }
     
-    func g(){
+    func printState(){
         let probel: String
-         if i >= 10, i < 100{
+        if step >= 10, step < 100{
             probel = " "
-         }else if i < 10{
+        }else if step < 10{
             probel = "  "
         }else{
             probel = ""
@@ -85,39 +84,38 @@ class Machine{
             header += "──"
         }
         header += "─"//"┐"
-        print(header)
-
-        var s = "\(probel)\(i) │ "
-        i += 1
+        
+        var registors = "\(probel)\(step) │ "
+        step += 1
         for each in lenta{
-            s.append(each)
-            s.append(" ")
+            registors.append(each)
+            registors.append(" ")
         }
         
-        var stroka = "    └─"
-        for _ in 0..<currentCell{
-            stroka += "──"
+        var footer = "    └─"
+        for _ in 0..<currentRegistor{
+            footer += "──"
         }
-        stroka += "┬"
-        for _ in 0..<lenta.count - currentCell - 1{
-            stroka += "──"
+        footer += "┬"
+        for _ in 0..<lenta.count - currentRegistor - 1{
+            footer += "──"
         }
-        stroka += "──" //"─┘"
-        
-        
-        print(s)
-        print(stroka)
+        footer += "──" //"─┘"
+
+        print(header)
+        print(registors)
+        print(footer)
         print()
     }
     
-    func toState(_ state: State, _ slovo: Character, _ cell: Int){
+    func toState(_ state: State, _ symbol: Character, _ registor: Int){
         self.state = state
-        self.lenta[currentCell] = slovo
-        self.currentCell += cell
+        self.lenta[currentRegistor] = symbol
+        self.currentRegistor += registor
     }
     
-    func f(){
-        g()
+    func calculate(){
+        printState()
         while self.state != .terminal{
             switch self.state {
             case .q0:
@@ -174,7 +172,7 @@ class Machine{
             default:
                 print("Error")
             }
-            g()
+            printState()
         }
         print("     terminal".uppercased())
     }
